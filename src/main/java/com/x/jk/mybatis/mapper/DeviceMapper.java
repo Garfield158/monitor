@@ -21,4 +21,8 @@ public interface DeviceMapper {
     List<DeviceInfo> getDevListBySchoolId(Integer schoolId, int first, Integer size);
 
     void UpdateDev(DeviceInfo deviceInfo);
+
+    void insertDev(DeviceInfo deviceInfo);
+
+    void delById(Integer id);
 }

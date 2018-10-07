@@ -15,4 +15,6 @@ public interface DeviceService {
     List<DeviceInfo> getDevListBySchoolId(Integer schoolId, Page pageObj);
 
     void UpdateDev(DeviceInfo deviceInfo);
+
+    void delById(Integer id);
 }

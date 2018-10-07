@@ -38,6 +38,15 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void UpdateDev(DeviceInfo deviceInfo) {
-        deviceMapper.UpdateDev(deviceInfo);
+        if (deviceInfo.getId()==0){
+            deviceMapper.insertDev(deviceInfo);
+        }else {
+            deviceMapper.UpdateDev(deviceInfo);
+        }
+    }
+
+    @Override
+    public void delById(Integer id) {
+        deviceMapper.delById(id);
     }
 }

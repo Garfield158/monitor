@@ -22,9 +22,6 @@
     <select id="getDevListBySchoolId" resultMap="DeviceInfo">
         select * from deviceinfo where schoolId=#{arg0} limit #{arg1},#{arg2}
     </select>
-    <update id="UpdateDev" parameterMap="DeviceInfo">
-
-    </update>
 
 
 
@@ -45,4 +42,17 @@
     <update id="updateDevImgUrl" parameterType="com.x.jk.po.entity.DeviceInfo">
         update  deviceinfo set imgurl = #{arg0} where id=#{arg1}
     </update>
+    <update id="UpdateDev" parameterType="com.x.jk.po.entity.DeviceInfo">
+        UPDATE deviceinfo set dev_Num=#{devNum},dev_name=#{devName},schoolId=#{schoolID},
+        channle_Num=#{channleNum},url=#{url},imgurl=#{imgUrl},IOTitle=#{}
+        where id=#{id}
+    </update>
+    <insert id="insertDev" parameterType="com.x.jk.po.entity.DeviceInfo">
+        insert into deviceinfo(dev_Num,dev_name,schoolId,channle_Num,url,imgurl,IOTitle)
+        values (#{devNum},#{devName},#{schoolID},#{channleNum},#{url},#{imgUrl},#{IOTitle})
+    </insert>
+
+    <delete id="delById" parameterType="java.lang.Integer">
+        delete from deviceinfo where id=#{id}
+    </delete>
 </mapper>

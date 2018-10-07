@@ -86,10 +86,15 @@ public class DeviceController {
 
     /**修改设备信息*/
     @RequestMapping("res/dev/updateDev")
-    public Result UpdateDev(Integer id,String devName,int channleNum,String devNum,int schoolID,
-                            int state,String url,String imgUrl,String IOTitle){
+    public Result UpdateDev(Integer id,String devName,int channleNum,String devNum,
+                            int schoolID, int state,String url,String imgUrl,
+                            String IOTitle){
         DeviceInfo deviceInfo = new DeviceInfo();
-        deviceInfo.setId(id);
+        if (id==null){
+            deviceInfo.setId(0);
+        }else {
+            deviceInfo.setId(id);
+        }
         deviceInfo.setDevName(devName);
         deviceInfo.setChannleNum(channleNum);
         deviceInfo.setDevNum(devNum);
@@ -104,6 +109,16 @@ public class DeviceController {
             return Result.bulid("修改失败");
         }
         return Result.bulid("修改成功");
+    }
+    @RequestMapping("res/dev/delById")
+    public Result delById(Integer id){
+        deviceService.delById(id);
+        return Result.bulid();
+    }
+    @RequestMapping("res/dev/getById")
+    public Result getById(Integer id){
+        DeviceInfo device = deviceService.getDeviceById(id);
+        return Result.bulid(device);
     }
 
 }
