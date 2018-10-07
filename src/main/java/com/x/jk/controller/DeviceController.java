@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +23,17 @@ public class DeviceController {
     @Autowired
     DeviceService deviceService;
     @RequestMapping("res/dev/getDev")
-    public Result getDeviceBySchoolId(Integer id,Integer page){
+    public Result getDeviceBySchoolId(Integer id,Integer page,Integer size){
         Page pageObj = new Page();
         pageObj.setPage(page);
+        pageObj.setSize(size);
         List<DeviceInfo> deviceInfos=deviceService.getDevBySchoolId(id,pageObj);
-        int k = deviceService.getDevCounts(id)%Page.size;
+        int k = deviceService.getDevCounts(id)%pageObj.getSize();
         int count;
         if(k==0){
-            count = deviceService.getDevCounts(id)/Page.size;
+            count = deviceService.getDevCounts(id)/pageObj.getSize();
         }else{
-            count = deviceService.getDevCounts(id)/Page.size+1;
+            count = deviceService.getDevCounts(id)/pageObj.getSize()+1;
         }
         pageObj.setCount(count);
         return Result.bulid(deviceInfos,pageObj);
@@ -61,6 +63,47 @@ public class DeviceController {
         map.put("channelNo",String.valueOf(deviceInfo.getChannleNum()));
         String data = HttpClientUtil.sendHttpsPost("https://open.ys7.com/api/lapp/device/ptz/stop",map);
         return Result.bulid(data);
+    }
+
+    /**根据学校id查询设备列表*/
+    @RequestMapping("res/dev/getDevListBySchoolId")
+    public Result getDevListBySchoolId(Integer schoolId,Integer page,Integer size){
+        List<DeviceInfo> devList = new ArrayList<DeviceInfo>();
+        Page pageObj = new Page();
+        pageObj.setPage(page);
+        pageObj.setSize(size);
+        devList = deviceService.getDevListBySchoolId(schoolId,pageObj);
+        int k = deviceService.getDevCounts(schoolId)%pageObj.getSize();
+        int count;
+        if(k==0){
+            count = deviceService.getDevCounts(schoolId)/pageObj.getSize();
+        }else{
+            count = deviceService.getDevCounts(schoolId)/pageObj.getSize()+1;
+        }
+        pageObj.setCount(count);
+        return Result.bulid(devList,pageObj);
+    }
+
+    /**修改设备信息*/
+    @RequestMapping("res/dev/updateDev")
+    public Result UpdateDev(Integer id,String devName,int channleNum,String devNum,int schoolID,
+                            int state,String url,String imgUrl,String IOTitle){
+        DeviceInfo deviceInfo = new DeviceInfo();
+        deviceInfo.setId(id);
+        deviceInfo.setDevName(devName);
+        deviceInfo.setChannleNum(channleNum);
+        deviceInfo.setDevNum(devNum);
+        deviceInfo.setSchoolID(schoolID);
+        deviceInfo.setState(state);
+        deviceInfo.setUrl(url);
+        deviceInfo.setImgUrl(imgUrl);
+        deviceInfo.setIOTitle(IOTitle);
+        try{
+            deviceService.UpdateDev(deviceInfo);
+        }catch (Exception e){
+            return Result.bulid("修改失败");
+        }
+        return Result.bulid("修改成功");
     }
 
 }

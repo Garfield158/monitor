@@ -17,4 +17,8 @@ public interface DeviceMapper {
     Integer getDevCounts(Integer id);
 
     void updateDevImgUrl(String picUrl,int id);
+
+    List<DeviceInfo> getDevListBySchoolId(Integer schoolId, int first, Integer size);
+
+    void UpdateDev(DeviceInfo deviceInfo);
 }

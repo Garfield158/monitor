@@ -2,7 +2,7 @@ package com.x.jk.po.entity;
 
 public class Page {
     private Integer page =1;
-    public static Integer size =6;
+    public  Integer size =6;
     private Integer count;
 
     public Integer getPage() {
@@ -19,5 +19,13 @@ public class Page {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }

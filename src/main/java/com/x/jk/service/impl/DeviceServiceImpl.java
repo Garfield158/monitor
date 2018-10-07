@@ -15,8 +15,8 @@ public class DeviceServiceImpl implements DeviceService {
     DeviceMapper deviceMapper;
     @Override
     public List<DeviceInfo> getDevBySchoolId(int id, Page pageObj) {
-        int first = (pageObj.getPage() - 1) * Page.size;
-        List<DeviceInfo> infos = deviceMapper.getAllBySchoolId(id,first,Page.size);
+        int first = (pageObj.getPage() - 1) * pageObj.getSize();
+        List<DeviceInfo> infos = deviceMapper.getAllBySchoolId(id,first,pageObj.getSize());
         return infos;
     }
 
@@ -28,5 +28,16 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Integer getDevCounts(Integer id) {
         return deviceMapper.getDevCounts(id);
+    }
+
+    @Override
+    public List<DeviceInfo> getDevListBySchoolId(Integer schoolId, Page pageObj) {
+        int first = (pageObj.getPage() - 1) * pageObj.getSize();
+        return deviceMapper.getDevListBySchoolId(schoolId,first,pageObj.getSize());
+    }
+
+    @Override
+    public void UpdateDev(DeviceInfo deviceInfo) {
+        deviceMapper.UpdateDev(deviceInfo);
     }
 }

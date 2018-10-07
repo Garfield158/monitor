@@ -19,6 +19,15 @@
         select * from deviceinfo where schoolId=#{arg0} limit #{arg1},#{arg2}
     </select>
 
+    <select id="getDevListBySchoolId" resultMap="DeviceInfo">
+        select * from deviceinfo where schoolId=#{arg0} limit #{arg1},#{arg2}
+    </select>
+    <update id="UpdateDev" parameterMap="DeviceInfo">
+
+    </update>
+
+
+
     <!--<delete id="deleteById" parameterType="java.lang.Integer">-->
         <!--delete from department where id = #{id}-->
     <!--</delete>-->
