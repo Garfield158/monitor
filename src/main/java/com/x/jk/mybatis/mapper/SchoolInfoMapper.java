@@ -10,4 +10,10 @@ import java.util.List;
 @Mapper
 public interface SchoolInfoMapper {
     List<SchoolInfo> getAll();
+
+    void addSchool(String name);
+
+    void updateSchool(SchoolInfo schoolInfo);
+
+    void delById(Integer id);
 }

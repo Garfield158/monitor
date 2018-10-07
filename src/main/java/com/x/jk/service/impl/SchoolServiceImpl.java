@@ -16,4 +16,22 @@ public class SchoolServiceImpl implements SchoolService {
     public List<SchoolInfo> getAllSchoolInfo() {
         return schoolInfoMapper.getAll();
     }
+
+    @Override
+    public void addSchool(String name) {
+        schoolInfoMapper.addSchool(name);
+    }
+
+    @Override
+    public void updateSchool(Integer id, String name) {
+        SchoolInfo schoolInfo = new SchoolInfo();
+        schoolInfo.setId(id);
+        schoolInfo.setSchoolName(name);
+        schoolInfoMapper.updateSchool(schoolInfo);
+    }
+
+    @Override
+    public void delSchoolById(Integer id) {
+        schoolInfoMapper.delById(id);
+    }
 }

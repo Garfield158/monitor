@@ -12,6 +12,17 @@
     <select id="getAll" resultMap="SchoolInfo">
         select * from schoolinfo
     </select>
+    <insert id="addSchool" parameterType="String">
+        INSERT INTO schoolinfo(school_name,region_id) VALUES(#{name},1)
+    </insert>
+
+    <update id="updateSchool" parameterType="com.x.jk.po.entity.SchoolInfo">
+        update schoolinfo set school_name=#{schoolName} where id=#{id}
+    </update>
+
+    <delete id="delById" parameterType="java.lang.Integer">
+        delete from schoolinfo where id=#{id}
+    </delete>
 
     <!--<delete id="deleteById" parameterType="java.lang.Integer">-->
         <!--delete from department where id = #{id}-->
