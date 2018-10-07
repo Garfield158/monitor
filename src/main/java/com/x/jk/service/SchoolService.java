@@ -6,4 +6,10 @@ import java.util.List;
 
 public interface SchoolService {
     List<SchoolInfo> getAllSchoolInfo();
+
+    void addSchool(String name);
+
+    void updateSchool(Integer id, String name);
+
+    void delSchoolById(Integer id);
 }
