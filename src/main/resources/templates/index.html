@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>监控系统</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link href="css/main.css" rel="stylesheet">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="https://open.ys7.com/sdk/js/1.4/ezuikit.js"></script>
+	<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
+</head>
+<body>
+<header class="index-header">
+	<h3 class="text-h3 text-center">监控系统</h3>
+</header>
+<div class="main-content">
+	<div class="menu-left text-center">
+		<select class="select-school" id="schoolList" onchange="getDevice(this)" >
+			<option value="0">请选择学校</option>
+		</select>
+	</div>
+	<div class="main-box">
+		<div class="monitor-div text-center" id="videoList">
+
+		</div>
+		<div class="pagination text-center">
+			<ul class="pager text-center">
+		    	<li ><label id="last" onclick="getDevice(null,'-1')"><<</label></li>
+				<li><a id="page" href="javascript:void(0);"></a>/<a id="count" href="javascript:void(0);"></a></li>
+		    	<li ><label id="next" onclick="getDevice(null,'1')">>></label></li>
+		  	</ul>
+		</div>
+	</div>
+</div>
+<div id="mongolian"></div>
+<div id="recordingPopup">
+	<div id="popupClose" onclick="closeRecord()">关闭</div>
+	<div class="popup-video">
+		<video id="myvideo"  width="970" height="500" controls="controls"></video>
+	</div>
+	<div class="popup-btn">
+		<div class="popup-btn-time">
+			<label>请选择时间段:</label>
+			<input id="mydate" type="date"/>
+            <input id="mytime" type="time">
+		</div>
+		<div class="popup-btn-play">
+			<span id="action" onclick="actionLB()" class="popup-video-play">播放</span>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url:"res/School/getAll",
+            method:"post",
+            success:function (data) {
+                var da=data.data;
+                var schoolList=$("#schoolList");
+                for (var key in da) {
+                    var val=da[key].schoolName;
+                    var id=da[key].id;
+                    schoolList.append("<option value="+id+">"+val+"</option>");
+                }
+            }
+        })
+    });
+    function getDevice(obj,k) {
+        var id = $(obj).val();
+        var page =1;
+        if(id==null||id==undefined){
+            id = $("#schoolList").val();
+            if(k=="-1"){
+                page =  parseInt($("#page").html())-1;
+			}else{
+                page =  parseInt($("#page").html())+1;
+            }
+		}
+        if(id==0){
+            $("#videoList").html("");
+            return;
+		}
+        $.ajax({
+            url:"res/dev/getDev",
+            method:"post",
+            data:"id="+id+"&page="+page,
+            success:function (msg) {
+                var data=msg.data;
+                var pageObj =msg.page;
+                var html="";
+                $("#videoList").html(html);
+                for (var key in data) {
+                    var ids=data[key].id;
+                    var url = data[key].url;
+                    var imgUrl=data[key].imgUrl;
+                    var devName = data[key].devName;
+                    html+="<div class='monitors text-center'>" +
+					"<video id='"+ids+"v' poster='"+imgUrl+"' controls playsInline webkit-playsinline autoplay  width='320' height='240' controls='controls'>" +
+					"<source src='"+url+"'></video>" +
+					"<p class=\"video-span\">"+devName+"</p>" +
+					"<div class='video-btn'>" +
+					"<div class='direction-btn'>" +
+					"<div class='btns btn-top' onclick='changeDevice("+ids+",0)'></div>" +
+					"<div class='btn-mid-box'><div class='btns btn-left' onclick='changeDevice("+ids+",2)'></div>" +
+					"<div class='btns btn-mid' onclick='stopDevice("+ids+")'></div>" +
+					"<div class='btns btn-right' onclick='changeDevice("+ids+",3)'></div></div>" +
+					"<div class='btns btn-bottom' onclick='changeDevice("+ids+",1)'></div></div>" +
+					"<div class='recording' onclick='openRecord("+ids+")'><div class='record-btn'>录播</div></div></div></div>";
+                    $("#videoList").html(html);
+                }
+                $("#page").html(pageObj.page);
+                $("#count").html(pageObj.count);
+                if(pageObj.page==1&&pageObj.count==1){
+                    $("#last").removeAttr("onclick");
+                    $("#next").removeAttr("onclick");
+				}else if(pageObj.page==1&&pageObj.page!=pageObj.count){
+                    $("#last").removeAttr("onclick");
+                    $("#next").attr("onclick","getDevice(null,'1')");
+				}else if(pageObj.page==pageObj.count&&pageObj.page!=1){
+                    $("#next").removeAttr("onclick");
+                    $("#last").attr("onclick","getDevice(null,'-1')");
+				}else{
+                    $("#last").attr("onclick","getDevice(null,'-1')");
+                    $("#next").attr("onclick","getDevice(null,'1')");
+				}
+                for (var key in data) {
+                    var ids=data[key].id;
+                    var str=ids+"v";
+                    newPlater(str);
+                }
+                addClick();
+            }
+        });
+    }
+
+    function changeDevice(id,direction){
+        $.ajax({
+            url:"res/dev/controlOne",
+            method:"post",
+            data:"id="+id+"&direction="+direction,
+            success:function (data) {
+                if(data.code == "200"){
+                    var json = eval('('+data.data+')');
+                    if("200"!=json.code){
+                        alert(json.msg);
+                    }
+                }else{
+                    alert("设备错误");
+                }
+            }
+        });
+    }
+    function stopDevice(id){
+        $.ajax({
+            url:"res/dev/stopDevice",
+            method:"post",
+            data:"id="+id,
+            success:function (data) {
+                if(data.code == "200"){
+                    var json = eval('('+data.data+')');
+                    if("200"!=json.code){
+                        alert(json.msg);
+                    }
+                }else{
+                    alert("设备错误");
+                }
+            }
+        });
+    }
+
+    function newPlater(id) {
+        new EZUIPlayer(id)
+    }
+    var devID;
+    function openRecord(id){
+        console.info("id"+id);
+        $("#mongolian").show();
+        $("#recordingPopup").show();
+        $("body").css("overflow","hidden");
+        devID=id;
+        console.info(devID);
+
+	}
+	
+	function actionLB() {
+        var time=$("#mytime").val();
+        var date=$("#mydate").val();
+        console.info(time);
+        console.info(devID);
+        $.ajax({
+            url:"res/media/getByTime",
+            method:"post",
+            data:"id="+devID+"&startDate="+date+"&startTime="+time,
+            success:function (msg) {
+                if(msg.code==200){
+                    console.info(msg.data.size);
+                    var vList = [msg.data.size];
+                    for (var i=0;i<msg.data.size;i++){
+                        vList[i]=msg.data.mediaByTime[i].url;
+					}
+                    var vLen = vList.length;
+                    var curr = 0;
+                    var video = document.getElementById("myvideo");
+                    video.src=vList[0];
+                    video.load();
+                    video.play();
+                    video.addEventListener('ended', function(){play(vList,vLen,curr);});
+                }
+            }
+        })
+    }
+
+    function play(vList,vLen,curr) {
+        curr++;
+        var video = document.getElementById("myvideo");
+        video.src = vList[curr];
+        video.load();
+        video.play();
+        if(curr >= vLen){
+            curr = 0;
+        }
+        video.addEventListener('ended', function(){play(vList,vLen,curr);});
+    }
+
+
+
+	function closeRecord(){
+        $("#mongolian").hide();
+        $("#recordingPopup").hide();
+        $("body").css("overflow","auto");
+        var video = document.getElementById("myvideo");
+        video.src="";
+	}
+
+	function addClick() {
+        /*控制按钮*/
+        let $monitors = $(".main-box .monitors");
+        for(let i = 0; i < $monitors.length; i++){
+            $monitors.eq(i).hover(function(){
+                $(this).find('.video-span').hide();
+                $(this).find('.video-btn').show();
+            },function(){
+                $(this).find('.video-span').show();
+                $(this).find('.video-btn').hide();
+            })
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.jk.mybatis.mapper.TokenMapper">
+    <resultMap id="token" type="com.x.jk.po.entity.Token">
+        <id property="id" column="id"/>
+        <result property="appKey" column="appKey"/>
+        <result property="secret" column="secret"/>
+        <result property="expireTime" column="expireTime"/>
+        <result property="token_rs" column="token_rs"/>
+    </resultMap>
+    <select id="getToken" resultMap="token">
+        select * from accesstoken
+    </select>
+    <update id="updateToken" parameterType="com.x.jk.po.entity.Token">
+        update accesstoken set token_rs =#{token_rs},expireTime =#{expireTime}
+    </update>
+
+</mapper>

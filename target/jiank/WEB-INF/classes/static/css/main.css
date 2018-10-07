@@ -1,0 +1,207 @@
+*{
+	margin:0;
+	padding:0;
+}
+/*header*/
+.index-header{
+	position: fixed;
+	top:0;
+	width: 100%;
+	height: 65px;
+	line-height: 65px;
+	background-color: #282829;
+	z-index: 10;
+}
+.index-header .text-h3{
+	color:#fff;
+}
+.text-center{
+	text-align: center;
+	color:#333;
+}
+/*main*/
+.main-content{
+	margin-top:66px;
+	padding:0;
+}
+/*左导航*/
+.main-content .menu-left{
+	position: fixed;
+	top:65px;
+	left: 0;
+	width: 220px;
+	height: calc(100% - 65px);
+	background-color: #323534;
+}
+.menu-left .select-school{
+	margin-top: 40px;
+	width: 150px;
+	height: 32px;
+	line-height: 32px;
+	border-radius: 3px;
+	cursor: pointer;
+	outline: none;
+}
+.menu-left .select-school option{
+	padding:10px 0;
+}
+/*视频主体*/
+.main-content .main-box{
+	position: absolute;
+	left: 220px;
+	min-width: 1080px;
+	background-color: #fff;
+	overflow: hidden;
+	padding-bottom: 50px;
+}
+.main-box .monitor-div{
+	height: 100%;
+	overflow: hidden;
+	padding:30px 20px 10px;
+}
+.monitor-div .monitors{
+	float: left;
+	width: 33.33%;
+	height: 300px;
+}
+.video-span{
+	margin:10px 0;
+	height: 16px;
+	line-height: 16px;
+	font-size: 14px;
+	display: none;
+}
+/*上下左右录播按钮*/
+.video-btn{
+	display: block;
+	margin:-10px 0 0 80px;
+}
+.video-btn .direction-btn .btns{
+	width: 0;
+	height: 0;
+	border-width: 10px;
+	border-style: solid;
+	cursor: pointer;
+}
+.video-btn .direction-btn .btn-top{
+	border-color: transparent transparent #333 transparent;
+}
+.video-btn .direction-btn .btn-left{
+	border-color: transparent #333 transparent transparent;
+}
+.video-btn .direction-btn .btn-right{
+	border-color: transparent transparent transparent #333;
+}
+.video-btn .direction-btn .btn-bottom{
+	border-color: #333 transparent transparent transparent;
+}
+.video-btn .direction-btn .btn-mid{
+	border-width: 6px;
+	border-color: #333;
+	margin:4px;
+}
+.direction-btn .btn-mid-box{
+	overflow: hidden;
+	margin-left: -20px;
+}
+.direction-btn .btn-mid-box .btns{
+	float: left;
+}
+.recording{
+	margin:-42px 0 0 150px;
+}
+.recording .record-btn{
+	width: 50px;
+	height: 28px;
+	line-height: 28px;
+	border-radius: 3px;
+	font-size:12px;
+	background-color: #333;
+	color: #fff;
+	cursor: pointer;
+}
+/*分页*/
+.pagination .pager{
+	list-style: none;
+	overflow: hidden;
+	margin-top: 20px;
+}
+.pagination .pager li{
+	display: inline-block;
+	list-style: none;
+	border:1px solid #666;
+	border-radius: 3px;
+	padding:3px 12px;
+	margin: 0 8px;
+}
+.pagination	.pager li a{
+	text-decoration: none;
+	color: #333;
+}
+/*蒙层*/
+#mongolian{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top:0;
+	left: 0;
+	background-color:rgba(0,0,0,.5);
+	z-index: 80;
+	display: none;
+}
+/*录播弹窗*/
+#recordingPopup{
+	display: none;
+	position: fixed;
+	top: calc(50% - 300px);
+	left: calc(50% - 550px);
+	width: 1100px;
+	height: 600px;
+	z-index:99;
+	border-radius: 2px;
+	background-color: #fff;
+}
+#popupClose{
+	cursor: pointer;
+	font-size:12px;
+	text-align: right;
+	margin:8px 10px 10px;
+}
+#popupClose:hover{
+	text-decoration: underline;
+	color:#f00;
+}
+.popup-video{
+	text-align: center;
+}
+.popup-btn{
+	text-align: center;
+	display: flex;
+	margin-top: 15px;
+}
+.popup-btn .popup-btn-time{
+	flex: 1;
+	text-align: right;
+}
+.popup-btn .popup-btn-time label{
+	font-size: 14px;
+	color: #333;
+	margin-right: 5px;
+}
+.popup-btn .popup-btn-play{
+	flex: 1;
+	text-align: left;
+}
+.popup-btn-play .popup-video-play{
+	display: inline-block;
+	width: 50px;
+	height: 26px;
+	line-height: 26px;
+	font-size: 14px;
+	color: #333;
+	border-radius: 2px;
+	cursor: pointer;
+	border:1px solid #666;
+	margin:-5px 0 0 50px;
+	text-align: center;
+}

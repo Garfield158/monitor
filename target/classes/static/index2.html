@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="/css/bootstrap.min.css">
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script src="https://open.ys7.com/sdk/js/1.4/ezuikit.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <style type="text/css">
+        .left{
+            margin-left:20px;margin-right:10px;background: #71dd8a;width: 300px;height: 300px;float: left
+        }
+        .center{
+            margin-right:20px;margin-left: 20px; background: #71dd8a;width: 300px;height: 300px;float: left
+        }
+        .right{
+            margin-left:10px;background: #71dd8a;width: 300px;height: 300px;float: left
+        }
+        .mt{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-lg-center" align="center">监控系统</h2>
+    <div id="schoolList"  style="float: left;margin-left: 20px;margin-top: 20px">
+    </div>
+    <div id="videoList" align="center"  style= "margin-left: 75px; float:left;width: 1000px;height: 400px; background: #9fcdff;">
+        <div class="left"><img src="../static/img/123.jpg">
+            <input type="button" value="播放"/>
+            <input type="button" value="設置"/>
+        </div>
+        <div class="center"></div>
+        <div class="right" ></div>
+    </div>
+    
+
+</div>
+</body>
+
+<script type="text/javascript">
+    (function () {
+        console.info(123456)
+    })()
+    $(function () {
+        $.ajax({
+            url:"res/School/getAll",
+            success:function (data) {
+                var da=data.data;
+                var schoolList=$("#schoolList");
+                for (var key in da) {
+                    var val=da[key].schoolName;
+                    var id=da[key].id;
+                    schoolList.append("<input onclick='getDevice("+id+")' type='button' class='btn-info' value="+val+">").append("</br>")
+                }
+            }
+        })
+    });
+    function getDevice(id) {
+        location.reload();
+            $.ajax({
+                url:"res/dev/getDev",
+                data:"id="+id,
+                success:function (msg) {
+
+                    var data=msg.data;
+                    var videoList=$("#videoList");
+                    for (var key in data) {
+                        if (key%3==0){
+                            videoList.append("<div class='left mt'><img src='//img//123.jpg'></div>").append("<input type='button' class='btn-info' onclick='actionV("+data.url+")' value='播放'/> <input type=button value=設置/>")
+                        }else if (key%3==1) {
+                            videoList.append("<div class='center mt'><img src='//img//123.jpg'></div>")
+                        }else {
+                            videoList.append("<div class='right mt'><img src='//img//123.jpg'></div>").append("<br>")
+                        }
+                    }
+                }
+            });
+    }
+    function actionV(url) {
+        var flashvars;
+        flashvars = {
+            f: '此处填写购买获取到的RTMP地址',    /*此处填写购买获取到的RTMP地址*/
+            c: 1
+        };
+        var params = {bgcolor: '#FFF', allowFullScreen: true, allowScriptAccess: 'always', wmode: 'transparent'};
+        CKobject.embedSWF("./ckplayer/ckplayer.swf", "videoPlay", "video", "100%", "100%", flashvars, params);
+    }
+</script>
+</html>
